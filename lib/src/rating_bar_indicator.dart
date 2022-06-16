@@ -16,7 +16,7 @@ class RatingBarIndicator extends StatefulWidget {
     this.itemPadding = EdgeInsets.zero,
     this.itemSize = 40.0,
     this.physics = const NeverScrollableScrollPhysics(),
-    this.rating = 0.0,
+    this.rating = 0,
   });
 
   /// {@macro flutterRatingBar.itemBuilder}
@@ -38,7 +38,7 @@ class RatingBarIndicator extends StatefulWidget {
   final EdgeInsets itemPadding;
 
   /// {@macro flutterRatingBar.itemSize}
-  final double itemSize;
+  final int itemSize;
 
   /// Controls the scrolling behaviour of rating bar.
   ///
@@ -48,14 +48,14 @@ class RatingBarIndicator extends StatefulWidget {
   /// Defines the rating value for indicator.
   ///
   /// Default is 0.0
-  final double rating;
+  final int rating;
 
   @override
   _RatingBarIndicatorState createState() => _RatingBarIndicatorState();
 }
 
 class _RatingBarIndicatorState extends State<RatingBarIndicator> {
-  double _ratingFraction = 0.0;
+  double _ratingFraction = 0;
   int _ratingNumber = 0;
   bool _isRTL = false;
 
@@ -97,7 +97,7 @@ class _RatingBarIndicatorState extends State<RatingBarIndicator> {
           if (widget.textDirection == TextDirection.rtl &&
               Directionality.of(context) != TextDirection.rtl) {
             return Transform(
-              transform: Matrix4.identity()..scale(-1.0, 1.0, 1.0),
+              transform: Matrix4.identity()..scale(-1, 1, 1),
               alignment: Alignment.center,
               transformHitTests: false,
               child: _buildItems(index),
@@ -165,7 +165,7 @@ class _IndicatorClipper extends CustomClipper<Rect> {
     this.rtlMode = false,
   });
 
-  final double ratingFraction;
+  final int ratingFraction;
   final bool rtlMode;
 
   @override
@@ -173,13 +173,13 @@ class _IndicatorClipper extends CustomClipper<Rect> {
     return rtlMode
         ? Rect.fromLTRB(
             size.width - size.width * ratingFraction,
-            0.0,
+            0,
             size.width,
             size.height,
           )
         : Rect.fromLTRB(
-            0.0,
-            0.0,
+            0,
+            0,
             size.width * ratingFraction,
             size.height,
           );
