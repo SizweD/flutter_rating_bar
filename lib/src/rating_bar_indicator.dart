@@ -14,7 +14,7 @@ class RatingBarIndicator extends StatefulWidget {
     this.direction = Axis.horizontal,
     this.itemCount = 5,
     this.itemPadding = EdgeInsets.zero,
-    this.itemSize = 40.0,
+    this.itemSize = 40,
     this.physics = const NeverScrollableScrollPhysics(),
     this.rating = 0,
   });
