@@ -71,7 +71,7 @@ class RatingBar extends StatefulWidget {
     this.initialRating = 0,
     this.itemCount = 5,
     this.itemPadding = EdgeInsets.zero,
-    this.itemSize = 40.0,
+    this.itemSize = 40,
     this.minRating = 0,
     this.tapOnlyMode = false,
     this.updateOnDrag = false,
@@ -220,7 +220,7 @@ class _RatingBarState extends State<RatingBar> {
   Widget build(BuildContext context) {
     final textDirection = widget.textDirection ?? Directionality.of(context);
     _isRTL = textDirection == TextDirection.rtl;
-    iconRating = 0.0;
+    iconRating = 0;
 
     return Material(
       color: Colors.transparent,
@@ -239,7 +239,7 @@ class _RatingBarState extends State<RatingBar> {
   Widget _buildRating(BuildContext context, int index) {
     final ratingWidget = widget._ratingWidget;
     final item = widget._itemBuilder?.call(context, index);
-    final ratingOffset = widget.allowHalfRating ? 0.5 : 1.0;
+    final ratingOffset = widget.allowHalfRating ? 1;
 
     Widget _ratingWidget;
 
@@ -276,7 +276,7 @@ class _RatingBarState extends State<RatingBar> {
           ),
         );
       }
-      iconRating += 0.5;
+      //iconRating += 0.5;
     } else {
       _ratingWidget = SizedBox(
         width: widget.itemSize,
@@ -286,7 +286,7 @@ class _RatingBarState extends State<RatingBar> {
           child: ratingWidget?.full ?? item,
         ),
       );
-      iconRating += 1.0;
+      iconRating += 1;
     }
 
     return IgnorePointer(
@@ -369,7 +369,7 @@ class _RatingBarState extends State<RatingBar> {
         currentRating = widget.itemCount.toInt();
       }
       if (currentRating < 0) {
-        currentRating = 0.0;
+        currentRating = 0;
       }
       if (_isRTL && widget.direction == Axis.horizontal) {
         currentRating = widget.itemCount - currentRating;
