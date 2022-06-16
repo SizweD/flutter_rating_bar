@@ -44,7 +44,7 @@ class RatingBar extends StatefulWidget {
     this.initialRating = 0,
     this.itemCount = 5,
     this.itemPadding = EdgeInsets.zero,
-    this.itemSize = 40.0,
+    this.itemSize = 40,
     this.minRating = 0,
     this.tapOnlyMode = false,
     this.updateOnDrag = false,
