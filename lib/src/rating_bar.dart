@@ -41,7 +41,7 @@ class RatingBar extends StatefulWidget {
     this.glow = true,
     this.glowRadius = 2,
     this.ignoreGestures = false,
-    this.initialRating = 0.0,
+    this.initialRating = 0,
     this.itemCount = 5,
     this.itemPadding = EdgeInsets.zero,
     this.itemSize = 40.0,
@@ -68,7 +68,7 @@ class RatingBar extends StatefulWidget {
     this.glow = true,
     this.glowRadius = 2,
     this.ignoreGestures = false,
-    this.initialRating = 0.0,
+    this.initialRating = 0,
     this.itemCount = 5,
     this.itemPadding = EdgeInsets.zero,
     this.itemSize = 40.0,
@@ -82,7 +82,7 @@ class RatingBar extends StatefulWidget {
   /// Return current rating whenever rating is updated.
   ///
   /// [updateOnDrag] can be used to change the behaviour how the callback reports the update.
-  final ValueChanged<double> onRatingUpdate;
+  final ValueChanged<int> onRatingUpdate;
 
   /// Defines color for glow.
   ///
@@ -92,7 +92,7 @@ class RatingBar extends StatefulWidget {
   /// Sets maximum rating
   ///
   /// Default is [itemCount].
-  final double? maxRating;
+  final int? maxRating;
 
   /// {@template flutterRatingBar.textDirection}
   /// The text flows from right to left if [textDirection] = TextDirection.rtl
@@ -124,7 +124,7 @@ class RatingBar extends StatefulWidget {
   /// Defines the radius of glow.
   ///
   /// Default is 2.
-  final double glowRadius;
+  final int glowRadius;
 
   /// if set to true, will disable any gestures over the rating bar.
   ///
@@ -132,7 +132,7 @@ class RatingBar extends StatefulWidget {
   final bool ignoreGestures;
 
   /// Defines the initial rating to be set to the rating bar.
-  final double initialRating;
+  final int initialRating;
 
   /// {@template flutterRatingBar.itemCount}
   /// Defines total number of rating bar items.
@@ -151,12 +151,12 @@ class RatingBar extends StatefulWidget {
   ///
   /// Default is 40.0
   /// {@endtemplate}
-  final double itemSize;
+  final int itemSize;
 
   /// Sets minimum rating
   ///
   /// Default is 0.
-  final double minRating;
+  final int minRating;
 
   /// if set to true will disable drag to rate feature. Note: Enabling this mode will disable half rating capability.
   ///
@@ -184,11 +184,11 @@ class RatingBar extends StatefulWidget {
 }
 
 class _RatingBarState extends State<RatingBar> {
-  double _rating = 0.0;
+  int _rating = 0;
   bool _isRTL = false;
-  double iconRating = 0.0;
+  int iconRating = 0;
 
-  late double _minRating, _maxRating;
+  late int _minRating, _maxRating;
   late final ValueNotifier<bool> _glow;
 
   @override
@@ -196,7 +196,7 @@ class _RatingBarState extends State<RatingBar> {
     super.initState();
     _glow = ValueNotifier(false);
     _minRating = widget.minRating;
-    _maxRating = widget.maxRating ?? widget.itemCount.toDouble();
+    _maxRating = widget.maxRating ?? widget.itemCount.toInt();
     _rating = widget.initialRating;
   }
 
@@ -207,7 +207,7 @@ class _RatingBarState extends State<RatingBar> {
       _rating = widget.initialRating;
     }
     _minRating = widget.minRating;
-    _maxRating = widget.maxRating ?? widget.itemCount.toDouble();
+    _maxRating = widget.maxRating ?? widget.itemCount.toInt();
   }
 
   @override
@@ -267,7 +267,7 @@ class _RatingBarState extends State<RatingBar> {
             fit: BoxFit.contain,
             child: _isRTL
                 ? Transform(
-                    transform: Matrix4.identity()..scale(-1.0, 1.0, 1.0),
+                    transform: Matrix4.identity()..scale(-1, 1, 1),
                     alignment: Alignment.center,
                     transformHitTests: false,
                     child: ratingWidget!.half,
@@ -293,14 +293,14 @@ class _RatingBarState extends State<RatingBar> {
       ignoring: widget.ignoreGestures,
       child: GestureDetector(
         onTapDown: (details) {
-          double value;
-          if (index == 0 && (_rating == 1 || _rating == 0.5)) {
+          int value;
+          if (index == 0 && (_rating == 1)) {
             value = 0;
           } else {
             final tappedPosition = details.localPosition.dx;
             final tappedOnFirstHalf = tappedPosition <= widget.itemSize / 2;
             value = index +
-                (tappedOnFirstHalf && widget.allowHalfRating ? 0.5 : 1.0);
+                (tappedOnFirstHalf && widget.allowHalfRating ? 1);
           }
 
           value = math.max(value, widget.minRating);
@@ -358,15 +358,15 @@ class _RatingBarState extends State<RatingBar> {
       if (box == null) return;
 
       final _pos = box.globalToLocal(dragDetails.globalPosition);
-      double i;
+      int i;
       if (widget.direction == Axis.horizontal) {
         i = _pos.dx / (widget.itemSize + widget.itemPadding.horizontal);
       } else {
         i = _pos.dy / (widget.itemSize + widget.itemPadding.vertical);
       }
-      var currentRating = widget.allowHalfRating ? i : i.round().toDouble();
+      var currentRating = widget.allowHalfRating ? i : i.round().toInt();
       if (currentRating > widget.itemCount) {
-        currentRating = widget.itemCount.toDouble();
+        currentRating = widget.itemCount.toInt();
       }
       if (currentRating < 0) {
         currentRating = 0.0;
@@ -388,7 +388,7 @@ class _RatingBarState extends State<RatingBar> {
   void _onDragEnd(DragEndDetails details) {
     _glow.value = false;
     widget.onRatingUpdate(iconRating);
-    iconRating = 0.0;
+    iconRating = 0;
   }
 }
 
@@ -402,7 +402,7 @@ class _HalfRatingWidget extends StatelessWidget {
   });
 
   final Widget child;
-  final double size;
+  final int size;
   final bool enableMask;
   final bool rtlMode;
   final Color unratedColor;
@@ -453,13 +453,13 @@ class _HalfClipper extends CustomClipper<Rect> {
   Rect getClip(Size size) => rtlMode
       ? Rect.fromLTRB(
           size.width / 2,
-          0.0,
+          0,
           size.width,
           size.height,
         )
       : Rect.fromLTRB(
-          0.0,
-          0.0,
+          0,
+          0,
           size.width / 2,
           size.height,
         );
@@ -476,7 +476,7 @@ class _NoRatingWidget extends StatelessWidget {
     required this.unratedColor,
   });
 
-  final double size;
+  final int size;
   final Widget child;
   final bool enableMask;
   final Color unratedColor;
